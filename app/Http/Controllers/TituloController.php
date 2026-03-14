@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CertificadoRequest;
-use App\Models\Certificado;
+use App\Http\Requests\TituloRequest;
+use App\Models\Titulo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class CertificadoController extends Controller
+class TituloController extends Controller
 {
     public function index(): Response
     {
         $search = request('search', '');
 
-        $certificados = Certificado::with('user')
+        $titulos = Titulo::with('user')
             ->where('user_id', auth()->id())
             ->when($search, function ($query) use ($search) {
                 $searchTerms = array_filter(
@@ -35,60 +35,60 @@ class CertificadoController extends Controller
                     }
                 });
             })
-            ->orderBy('fecha_inicio', 'desc')
+            ->orderBy('fecha_titulacion', 'desc')
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('certificados/Index', [
-            'certificados' => $certificados,
+        return Inertia::render('titulos/Index', [
+            'titulos' => $titulos,
             'filters' => ['search' => $search],
         ]);
     }
 
-    public function store(CertificadoRequest $request): RedirectResponse
+    public function store(TituloRequest $request): RedirectResponse
     {
-        $this->authorize('create', Certificado::class);
+        $this->authorize('create', Titulo::class);
 
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
 
         if ($request->hasFile('pdf_path')) {
-            $data['pdf_path'] = $request->file('pdf_path')->store('certificados', 'public');
+            $data['pdf_path'] = $request->file('pdf_path')->store('titulos', 'public');
         }
 
-        Certificado::create($data);
+        Titulo::create($data);
 
-        return to_route('certificados.index');
+        return to_route('titulos.index');
     }
 
-    public function update(CertificadoRequest $request, Certificado $certificado): RedirectResponse
+    public function update(TituloRequest $request, Titulo $titulo): RedirectResponse
     {
-        $this->authorize('update', $certificado);
+        $this->authorize('update', $titulo);
 
         $data = $request->validated();
 
         if ($request->hasFile('pdf_path')) {
-            if ($certificado->pdf_path) {
-                Storage::disk('public')->delete($certificado->pdf_path);
+            if ($titulo->pdf_path) {
+                Storage::disk('public')->delete($titulo->pdf_path);
             }
-            $data['pdf_path'] = $request->file('pdf_path')->store('certificados', 'public');
+            $data['pdf_path'] = $request->file('pdf_path')->store('titulos', 'public');
         }
 
-        $certificado->update($data);
+        $titulo->update($data);
 
-        return to_route('certificados.index');
+        return to_route('titulos.index');
     }
 
-    public function destroy(Certificado $certificado): RedirectResponse
+    public function destroy(Titulo $titulo): RedirectResponse
     {
-        $this->authorize('delete', $certificado);
+        $this->authorize('delete', $titulo);
 
-        if ($certificado->pdf_path) {
-            Storage::disk('public')->delete($certificado->pdf_path);
+        if ($titulo->pdf_path) {
+            Storage::disk('public')->delete($titulo->pdf_path);
         }
 
-        $certificado->delete();
+        $titulo->delete();
 
-        return to_route('certificados.index');
+        return to_route('titulos.index');
     }
 }

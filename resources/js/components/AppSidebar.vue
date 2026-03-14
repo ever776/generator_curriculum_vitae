@@ -5,6 +5,7 @@ import {
     FolderGit2,
     LayoutGrid,
     GraduationCap,
+    Briefcase,
 } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
@@ -21,6 +22,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as certificadosIndex } from '@/routes/certificados';
+import { index as experienciasLaboralesIndex } from '@/routes/experiencias-laborales';
+import { index as titulosIndex } from '@/routes/titulos';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -33,6 +36,16 @@ const mainNavItems: NavItem[] = [
         title: 'Certificados',
         href: certificadosIndex(),
         icon: GraduationCap,
+    },
+    {
+        title: 'Títulos',
+        href: titulosIndex(),
+        icon: GraduationCap,
+    },
+    {
+        title: 'Experiencias Laborales',
+        href: experienciasLaboralesIndex(),
+        icon: Briefcase,
     },
 ];
 
