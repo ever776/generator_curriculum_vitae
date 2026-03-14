@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Certificado extends Model
@@ -10,11 +11,13 @@ class Certificado extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'nombre',
         'institucion',
         'fecha_inicio',
         'fecha_conclusion',
         'duracion',
+        'pdf_path',
     ];
 
     protected function casts(): array
@@ -26,6 +29,11 @@ class Certificado extends Model
         ];
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function rules(): array
     {
         return [
@@ -34,6 +42,7 @@ class Certificado extends Model
             'fecha_inicio' => ['required', 'date'],
             'fecha_conclusion' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'duracion' => ['required', 'integer', 'min:1'],
+            'pdf_path' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
         ];
     }
 
@@ -41,6 +50,8 @@ class Certificado extends Model
     {
         return [
             'fecha_conclusion.after_or_equal' => 'La fecha de conclusión debe ser posterior o igual a la fecha de inicio.',
+            'pdf_path.mimes' => 'El archivo debe ser un PDF.',
+            'pdf_path.max' => 'El archivo no puede superar los 10MB.',
         ];
     }
 }

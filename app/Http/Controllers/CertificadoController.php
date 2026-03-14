@@ -5,48 +5,70 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CertificadoRequest;
 use App\Models\Certificado;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CertificadoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use AuthorizesRequests; 
+
     public function index(): Response
     {
-        $certificados = Certificado::orderBy('fecha_inicio', 'desc')->get();
+        $certificados = Certificado::with('user')
+            ->where('user_id', auth()->id())
+            ->orderBy('fecha_inicio', 'desc')
+            ->get();
 
         return Inertia::render('certificados/Index', [
             'certificados' => $certificados,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CertificadoRequest $request): RedirectResponse
     {
-        Certificado::create($request->validated());
+        $this->authorize('create', Certificado::class);
+
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
+
+        if ($request->hasFile('pdf_path')) {
+            $data['pdf_path'] = $request->file('pdf_path')->store('certificados', 'public');
+        }
+
+        Certificado::create($data);
 
         return to_route('certificados.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(CertificadoRequest $request, Certificado $certificado): RedirectResponse
     {
-        $certificado->update($request->validated());
+        $this->authorize('update', $certificado);
+
+        $data = $request->validated();
+
+        if ($request->hasFile('pdf_path')) {
+            if ($certificado->pdf_path) {
+                Storage::disk('public')->delete($certificado->pdf_path);
+            }
+            $data['pdf_path'] = $request->file('pdf_path')->store('certificados', 'public');
+        }
+
+        $certificado->update($data);
 
         return to_route('certificados.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Certificado $certificado): RedirectResponse
     {
+        $this->authorize('delete', $certificado);
+
+        if ($certificado->pdf_path) {
+            Storage::disk('public')->delete($certificado->pdf_path);
+        }
+
         $certificado->delete();
 
         return to_route('certificados.index');
