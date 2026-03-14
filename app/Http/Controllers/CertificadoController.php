@@ -4,26 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CertificadoRequest;
 use App\Models\Certificado;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CertificadoController extends Controller
 {
-    use AuthorizesRequests; 
+    use AuthorizesRequests;
 
     public function index(): Response
     {
+        $search = request('search', '');
+
         $certificados = Certificado::with('user')
             ->where('user_id', auth()->id())
+            ->when($search, function ($query) use ($search) {
+                $searchTerms = array_filter(
+                    array_map('trim', explode(' ', mb_strtolower($search)))
+                );
+
+                if (empty($searchTerms)) {
+                    return;
+                }
+
+                $query->where(function ($q) use ($searchTerms) {
+                    foreach ($searchTerms as $term) {
+                        $q->where(function ($sub) use ($term) {
+                            $sub->whereRaw('LOWER(nombre) LIKE ?', ["%{$term}%"])
+                                ->orWhereRaw('LOWER(institucion) LIKE ?', ["%{$term}%"]);
+                        });
+                    }
+                });
+            })
             ->orderBy('fecha_inicio', 'desc')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('certificados/Index', [
             'certificados' => $certificados,
+            'filters' => ['search' => $search],
         ]);
     }
 
