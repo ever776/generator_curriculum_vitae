@@ -36,7 +36,7 @@ interface ExperienciaLaboral {
     fecha_inicio: string;
     fecha_final: string | null;
     duracion: number | null;
-    pdf_path: string | null;
+    pdfs: string[] | null;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
@@ -285,18 +285,20 @@ const breadcrumbs: BreadcrumbItem[] = [
                                 </div>
 
                                 <div class="grid gap-2">
-                                    <Label for="pdf_path">PDF</Label>
+                                    <Label for="pdfs">PDFs (máximo 5)</Label>
                                     <input
-                                        id="pdf_path"
-                                        name="pdf_path"
+                                        id="pdfs"
+                                        name="pdfs[]"
                                         type="file"
                                         accept="application/pdf"
+                                        multiple
                                         class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
                                     />
                                     <p class="text-xs text-muted-foreground">
-                                        Selecciona un archivo PDF (opcional)
+                                        Selecciona hasta 5 archivos PDF
+                                        (opcional)
                                     </p>
-                                    <InputError :message="errors.pdf_path" />
+                                    <InputError :message="errors.pdfs" />
                                 </div>
                             </div>
 
@@ -463,17 +465,27 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     {{ formatDuration(experiencia.duracion) }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    <a
-                                        v-if="experiencia.pdf_path"
-                                        :href="`/storage/${experiencia.pdf_path}`"
-                                        target="_blank"
-                                        class="text-blue-600 hover:underline"
-                                    >
-                                        Ver PDF
-                                    </a>
-                                    <span v-else class="text-muted-foreground"
+                                    <span
+                                        v-if="
+                                            !experiencia.pdfs ||
+                                            experiencia.pdfs.length === 0
+                                        "
+                                        class="text-muted-foreground"
                                         >-</span
                                     >
+                                    <div v-else class="flex flex-wrap gap-2">
+                                        <a
+                                            v-for="(
+                                                pdf, index
+                                            ) in experiencia.pdfs"
+                                            :key="index"
+                                            :href="`/storage/${pdf}`"
+                                            target="_blank"
+                                            class="text-blue-600 hover:underline"
+                                        >
+                                            Ver PDF {{ index + 1 }}
+                                        </a>
+                                    </div>
                                 </td>
                                 <td class="px-4 py-3 text-right">
                                     <div class="flex justify-end gap-1">
@@ -707,36 +719,52 @@ const breadcrumbs: BreadcrumbItem[] = [
                             </div>
 
                             <div class="grid gap-2">
-                                <Label for="edit-pdf_path"
-                                    >PDF (opcional)</Label
-                                >
+                                <Label for="edit-pdfs">PDFs (máximo 5)</Label>
                                 <input
-                                    id="edit-pdf_path"
-                                    name="pdf_path"
+                                    id="edit-pdfs"
+                                    name="pdfs[]"
                                     type="file"
                                     accept="application/pdf"
+                                    multiple
                                     class="h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
                                 />
                                 <p class="text-xs text-muted-foreground">
-                                    Selecciona un archivo PDF para reemplazar el
-                                    actual
+                                    Selecciona hasta 5 archivos PDF
                                 </p>
                                 <div
-                                    v-if="selectedExperiencia?.pdf_path"
+                                    v-if="
+                                        selectedExperiencia?.pdfs &&
+                                        selectedExperiencia.pdfs.length > 0
+                                    "
                                     class="mt-2"
                                 >
                                     <p class="text-sm font-medium">
-                                        PDF actual:
+                                        PDFs actuales:
                                     </p>
-                                    <a
-                                        :href="`/storage/${selectedExperiencia.pdf_path}`"
-                                        target="_blank"
-                                        class="text-blue-600 hover:underline"
+                                    <ul class="mt-1 text-sm">
+                                        <li
+                                            v-for="(
+                                                pdf, index
+                                            ) in selectedExperiencia.pdfs"
+                                            :key="index"
+                                        >
+                                            <a
+                                                :href="`/storage/${pdf}`"
+                                                target="_blank"
+                                                class="text-blue-600 hover:underline"
+                                            >
+                                                PDF {{ index + 1 }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <p
+                                        class="mt-1 text-xs text-muted-foreground"
                                     >
-                                        Ver PDF actual
-                                    </a>
+                                        Sube nuevos PDFs para agregarlos (máx. 5
+                                        total)
+                                    </p>
                                 </div>
-                                <InputError :message="errors.pdf_path" />
+                                <InputError :message="errors.pdfs" />
                             </div>
                         </div>
 

@@ -26,7 +26,7 @@ class ExperienciaLaboral extends Model
         'fecha_inicio',
         'fecha_final',
         'duracion',
-        'pdf_path',
+        'pdfs',
     ];
 
     protected function casts(): array
@@ -34,6 +34,7 @@ class ExperienciaLaboral extends Model
         return [
             'fecha_inicio' => 'date',
             'fecha_final' => 'date',
+            'pdfs' => 'array',
         ];
     }
 

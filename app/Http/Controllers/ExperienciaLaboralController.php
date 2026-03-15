@@ -52,9 +52,18 @@ class ExperienciaLaboralController extends Controller
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
 
-        if ($request->hasFile('pdf_path')) {
-            $data['pdf_path'] = $request->file('pdf_path')->store('experiencias-laborales', 'public');
+        $pdfs = [];
+        if ($request->hasFile('pdfs')) {
+            $files = $request->file('pdfs');
+            if (is_array($files)) {
+                foreach ($files as $pdf) {
+                    if ($pdf && count($pdfs) < 5) {
+                        $pdfs[] = $pdf->store('experiencias-laborales', 'public');
+                    }
+                }
+            }
         }
+        $data['pdfs'] = $pdfs;
 
         ExperienciaLaboral::create($data);
 
@@ -69,14 +78,20 @@ class ExperienciaLaboralController extends Controller
 
         $data = $request->validated();
 
-        if ($request->hasFile('pdf_path')) {
-            if ($experienciaLaboral->pdf_path) {
-                Storage::disk('public')->delete($experienciaLaboral->pdf_path);
+        $pdfs = $experienciaLaboral->pdfs ?? [];
+
+        if ($request->hasFile('pdfs')) {
+            $files = $request->file('pdfs');
+            if (is_array($files)) {
+                foreach ($files as $pdf) {
+                    if ($pdf && count($pdfs) < 5) {
+                        $pdfs[] = $pdf->store('experiencias-laborales', 'public');
+                    }
+                }
             }
-            $data['pdf_path'] = $request->file('pdf_path')->store('experiencias-laborales', 'public');
-        } else {
-            unset($data['pdf_path']);
         }
+
+        $data['pdfs'] = $pdfs;
 
         $experienciaLaboral->update($data);
 
@@ -89,8 +104,10 @@ class ExperienciaLaboralController extends Controller
 
         $this->authorize('delete', $experienciaLaboral);
 
-        if ($experienciaLaboral->pdf_path) {
-            Storage::disk('public')->delete($experienciaLaboral->pdf_path);
+        if ($experienciaLaboral->pdfs) {
+            foreach ($experienciaLaboral->pdfs as $pdf) {
+                Storage::disk('public')->delete($pdf);
+            }
         }
 
         $experienciaLaboral->delete();
