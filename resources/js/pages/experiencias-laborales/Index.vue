@@ -83,8 +83,8 @@ const formatDate = (date: string | null) => {
 
     return new Date(date).toLocaleDateString('es-ES', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
     });
 };
 
@@ -181,7 +181,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <DialogTrigger as-child>
                         <Button>Agregar Experiencia</Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent class="max-h-[70vh] overflow-y-auto">
                         <Form
                             :action="store()"
                             v-slot="{ errors, processing, clearErrors }"
@@ -205,7 +205,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         name="entidad"
                                         type="text"
                                         placeholder="Nombre de la empresa"
-                                        required
                                     />
                                     <InputError :message="errors.entidad" />
                                 </div>
@@ -217,7 +216,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         name="puesto"
                                         type="text"
                                         placeholder="Desarrollador Full Stack"
-                                        required
                                     />
                                     <InputError :message="errors.puesto" />
                                 </div>
@@ -231,7 +229,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         name="descripcion"
                                         type="text"
                                         placeholder="Breve descripción de tus funciones..."
-                                        required
                                     />
                                     <InputError :message="errors.descripcion" />
                                 </div>
@@ -243,7 +240,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         name="direccion"
                                         type="text"
                                         placeholder="Ciudad, País"
-                                        required
                                     />
                                     <InputError :message="errors.direccion" />
                                 </div>
@@ -257,7 +253,6 @@ const breadcrumbs: BreadcrumbItem[] = [
                                             id="fecha_inicio"
                                             name="fecha_inicio"
                                             type="date"
-                                            required
                                         />
                                         <InputError
                                             :message="errors.fecha_inicio"
@@ -602,7 +597,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
             <!-- Edit Modal -->
             <Dialog v-model:open="showEditDialog">
-                <DialogContent>
+                <DialogContent class="max-h-[70vh] overflow-y-auto">
                     <Form
                         v-if="selectedExperiencia"
                         :action="update(selectedExperiencia.id)"
