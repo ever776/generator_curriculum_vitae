@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class ExperienciaLaboralController extends Controller
 {
     public function index(): Response

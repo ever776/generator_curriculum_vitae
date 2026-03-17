@@ -52,6 +52,38 @@ const user = computed(() => page.props.auth.user);
                     class="space-y-6"
                     v-slot="{ errors, processing, recentlySuccessful }"
                 >
+                    <div class="flex items-center gap-6">
+                        <div class="relative">
+                            <img
+                                v-if="user.foto"
+                                :src="'/storage/' + user.foto"
+                                alt="Foto de perfil"
+                                class="h-24 w-24 rounded-full border-2 border-gray-200 object-cover"
+                            />
+                            <div
+                                v-else
+                                class="flex h-24 w-24 items-center justify-center rounded-full border-2 border-gray-200 bg-gray-200"
+                            >
+                                <span class="text-3xl text-gray-400">{{
+                                    user.name?.charAt(0).toUpperCase()
+                                }}</span>
+                            </div>
+                        </div>
+                        <div class="grid gap-2">
+                            <Label for="foto">Foto de Perfil</Label>
+                            <Input
+                                id="foto"
+                                type="file"
+                                name="foto"
+                                accept="image/jpeg,image/png,image/webp"
+                            />
+                            <InputError :message="errors.foto" />
+                            <p class="text-xs text-gray-500">
+                                JPG, PNG o WebP. Máximo 2MB.
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="grid gap-2">
                             <Label for="name">Nombre</Label>

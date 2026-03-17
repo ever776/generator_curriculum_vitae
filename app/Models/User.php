@@ -32,6 +32,7 @@ class User extends Authenticatable
         'domicilio',
         'celular',
         'descripcion_profesional',
+        'foto',
     ];
 
     /**

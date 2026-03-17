@@ -26,6 +26,7 @@ trait ProfileValidationRules
             'domicilio' => ['nullable', 'string', 'max:255'],
             'celular' => ['nullable', 'string', 'max:20'],
             'descripcion_profesional' => ['nullable', 'string'],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 
