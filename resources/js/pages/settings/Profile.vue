@@ -8,6 +8,7 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { edit } from '@/routes/profile';
@@ -43,7 +44,7 @@ const user = computed(() => page.props.auth.user);
                 <Heading
                     variant="small"
                     title="Profile information"
-                    description="Update your name and email address"
+                    description="Update your profile information"
                 />
 
                 <Form
@@ -51,44 +52,157 @@ const user = computed(() => page.props.auth.user);
                     class="space-y-6"
                     v-slot="{ errors, processing, recentlySuccessful }"
                 >
-                    <div class="grid gap-2">
-                        <Label for="name">Name</Label>
-                        <Input
-                            id="name"
-                            class="mt-1 block w-full"
-                            name="name"
-                            :default-value="user.name"
-                            required
-                            autocomplete="name"
-                            placeholder="Full name"
-                        />
-                        <InputError class="mt-2" :message="errors.name" />
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="grid gap-2">
+                            <Label for="name">Nombre</Label>
+                            <Input
+                                id="name"
+                                name="name"
+                                :default-value="user.name"
+                                placeholder="Tu nombre"
+                            />
+                            <InputError :message="errors.name" />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="apellidos">Apellidos</Label>
+                            <Input
+                                id="apellidos"
+                                name="apellidos"
+                                :default-value="user.apellidos"
+                                placeholder="Tus apellidos"
+                            />
+                            <InputError :message="errors.apellidos" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="grid gap-2">
+                            <Label for="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                name="email"
+                                :default-value="user.email"
+                                placeholder="Tu email"
+                            />
+                            <InputError :message="errors.email" />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="celular">Celular</Label>
+                            <Input
+                                id="celular"
+                                name="celular"
+                                :default-value="user.celular"
+                                placeholder="Tu número de celular"
+                            />
+                            <InputError :message="errors.celular" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="grid gap-2">
+                            <Label for="lugar_fecha_nacimiento"
+                                >Lugar y Fecha de Nacimiento</Label
+                            >
+                            <Input
+                                id="lugar_fecha_nacimiento"
+                                name="lugar_fecha_nacimiento"
+                                :default-value="user.lugar_fecha_nacimiento"
+                                placeholder="Ciudad, País - Fecha"
+                            />
+                            <InputError
+                                :message="errors.lugar_fecha_nacimiento"
+                            />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="nacionalidad">Nacionalidad</Label>
+                            <Input
+                                id="nacionalidad"
+                                name="nacionalidad"
+                                :default-value="user.nacionalidad"
+                                placeholder="Tu nacionalidad"
+                            />
+                            <InputError :message="errors.nacionalidad" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="grid gap-2">
+                            <Label for="cedula_identidad"
+                                >Cédula de Identidad</Label
+                            >
+                            <Input
+                                id="cedula_identidad"
+                                name="cedula_identidad"
+                                :default-value="user.cedula_identidad"
+                                placeholder="Tu número de cédula"
+                            />
+                            <InputError :message="errors.cedula_identidad" />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="estado_civil">Estado Civil</Label>
+                            <Input
+                                id="estado_civil"
+                                name="estado_civil"
+                                :default-value="user.estado_civil"
+                                placeholder="Tu estado civil"
+                            />
+                            <InputError :message="errors.estado_civil" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="grid gap-2">
+                            <Label for="idioma">Idioma</Label>
+                            <Input
+                                id="idioma"
+                                name="idioma"
+                                :default-value="user.idioma"
+                                placeholder="Idiomas que dominas"
+                            />
+                            <InputError :message="errors.idioma" />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="domicilio">Domicilio</Label>
+                            <Input
+                                id="domicilio"
+                                name="domicilio"
+                                :default-value="user.domicilio"
+                                placeholder="Tu dirección"
+                            />
+                            <InputError :message="errors.domicilio" />
+                        </div>
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="email">Email address</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            class="mt-1 block w-full"
-                            name="email"
-                            :default-value="user.email"
-                            required
-                            autocomplete="username"
-                            placeholder="Email address"
+                        <Label for="descripcion_profesional"
+                            >Descripción Profesional</Label
+                        >
+                        <Textarea
+                            id="descripcion_profesional"
+                            name="descripcion_profesional"
+                            :default-value="user.descripcion_profesional"
+                            placeholder="Cuéntanos sobre ti profesionalmente..."
+                            rows="5"
                         />
-                        <InputError class="mt-2" :message="errors.email" />
+                        <InputError :message="errors.descripcion_profesional" />
                     </div>
 
                     <div v-if="mustVerifyEmail && !user.email_verified_at">
                         <p class="-mt-4 text-sm text-muted-foreground">
-                            Your email address is unverified.
+                            Tu email no está verificado.
                             <Link
                                 :href="send()"
                                 as="button"
                                 class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                             >
-                                Click here to resend the verification email.
+                                Haz clic aquí para reenviar el correo de
+                                verificación.
                             </Link>
                         </p>
 
@@ -96,8 +210,8 @@ const user = computed(() => page.props.auth.user);
                             v-if="status === 'verification-link-sent'"
                             class="mt-2 text-sm font-medium text-green-600"
                         >
-                            A new verification link has been sent to your email
-                            address.
+                            Se ha enviado un nuevo enlace de verificación a tu
+                            correo.
                         </div>
                     </div>
 
@@ -105,7 +219,7 @@ const user = computed(() => page.props.auth.user);
                         <Button
                             :disabled="processing"
                             data-test="update-profile-button"
-                            >Save</Button
+                            >Guardar</Button
                         >
 
                         <Transition
@@ -118,7 +232,7 @@ const user = computed(() => page.props.auth.user);
                                 v-show="recentlySuccessful"
                                 class="text-sm text-neutral-600"
                             >
-                                Saved.
+                                Guardado.
                             </p>
                         </Transition>
                     </div>

@@ -22,6 +22,12 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
+- @inertiajs/vue3 (INERTIA_VUE) - v2
+- tailwindcss (TAILWINDCSS) - v4
+- vue (VUE) - v3
+- @laravel/vite-plugin-wayfinder (WAYFINDER_VITE) - v0
+- eslint (ESLINT) - v9
+- prettier (PRETTIER) - v3
 
 ## Skills Activation
 
@@ -29,6 +35,8 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - `wayfinder-development` — Activates whenever referencing backend routes in frontend components. Use when importing from @/actions or @/routes, calling Laravel routes from TypeScript, or working with Wayfinder route functions.
 - `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
+- `inertia-vue-development` — Develops Inertia.js v2 Vue client-side applications. Activates when creating Vue pages, forms, or navigation; using <Link>, <Form>, useForm, or router; working with deferred props, prefetching, or polling; or when user mentions Vue with Inertia, Vue pages, Vue forms, or Vue navigation.
+- `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
 
 ## Conventions
 
@@ -57,35 +65,6 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
 
-=== build and test commands ===
-
-# Commands
-
-## PHP Commands
-
-- **Run all tests**: `php artisan test` or `composer test`
-- **Run single test**: `php artisan test --filter=TestName` or `php artisan test --filter=TestClass`
-- **Run tests with compact output**: `php artisan test --compact`
-- **Run tests in parallel**: `pest --parallel`
-- **Lint PHP files**: `composer lint` or `vendor/bin/pint --parallel`
-- **Lint check (dry-run)**: `composer lint:check` or `vendor/bin/pint --parallel --test`
-- **Clear config cache**: `php artisan config:clear`
-
-## Node/npm Commands
-
-- **Install dependencies**: `npm install`
-- **Build for production**: `npm run build`
-- **Build with SSR**: `npm run build:ssr`
-- **Development server**: `npm run dev`
-- **Lint JavaScript/TypeScript**: `npm run lint` (fixes) or `npm run lint:check` (check only)
-- **Check types**: `npm run types:check`
-- **Format code**: `npm run format` (writes) or `npm run format:check` (check only)
-
-## Composer Commands
-
-- **Full dev setup**: `composer run setup`
-- **Run all CI checks**: `composer run ci:check`
-
 === boost rules ===
 
 # Laravel Boost
@@ -104,7 +83,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 ## Debugging
 
 - Use the `database-query` tool when you only need to read from the database.
-- Use `database-schema` tool to inspect table structure before writing migrations or models.
+- Use the `database-schema` tool to inspect table structure before writing migrations or models.
 - To execute PHP code for debugging, run `php artisan tinker --execute "your code here"` directly.
 - To read configuration values, read the config files directly or run `php artisan config:show [key]`.
 - To inspect routes, run `php artisan route:list` directly.
@@ -132,13 +111,9 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 === php rules ===
 
-# PHP Code Style
-
-## Basic Rules
+# PHP
 
 - Always use curly braces for control structures, even for single-line bodies.
-- Use the Laravel Pint preset (`pint.json` has `"preset": "laravel"`).
-- Run `vendor/bin/pint --format agent` after modifying PHP files.
 
 ## Constructors
 
@@ -151,6 +126,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 - Always use explicit return type declarations for methods and functions.
 - Use appropriate PHP type hints for method parameters.
 
+<!-- Explicit Return Types and Method Params -->
 ```php
 protected function isAccessible(User $user, ?string $path = null): bool
 {
@@ -160,60 +136,15 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Enums
 
-- Keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
+- Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
 
 ## Comments
 
 - Prefer PHPDoc blocks over inline comments. Never use comments within the code itself unless the logic is exceptionally complex.
+
+## PHPDoc Blocks
+
 - Add useful array shape type definitions when appropriate.
-
-=== frontend rules ===
-
-# Frontend Code Style (TypeScript/Vue)
-
-## ESLint Configuration
-
-This project uses ESLint with Vue, TypeScript, and Prettier integration. Key rules:
-
-- **Curly braces**: Always required for all control structures (`curly: ['error', 'all']`)
-- **Brace style**: 1TBS (one true brace style), no single-line blocks
-- **Padding**: Blank lines required around control statements (if, return, for, while, do, switch, try, throw)
-- **Type imports**: Use `import type { ... }` syntax, prefer separate type imports (`fixStyle: 'separate-type-imports'`)
-
-## Import Order
-
-Groups (in this order):
-
-1. Built-in (node)
-2. External (npm packages)
-3. Internal (app code)
-4. Parent relative imports
-5. Sibling relative imports
-6. Index imports
-
-Alphabetize within groups (case insensitive).
-
-## Prettier Configuration
-
-- Semi: true
-- Single quotes: true
-- Print width: 80
-- Tab width: 4 (2 for YAML files)
-- Tailwind functions: `clsx`, `cn`, `cva`
-
-## TypeScript Guidelines
-
-- Avoid `any` type when possible
-- Use explicit return types on functions
-- Import types separately: `import type { SomeType } from '...'`
-
-## Ignored Paths
-
-The following paths are ignored by ESLint:
-
-- `vendor/`, `node_modules/`, `public/`, `bootstrap/ssr/`
-- `resources/js/actions/**`, `resources/js/routes/**`, `resources/js/wayfinder/**`
-- `resources/js/components/ui/*`
 
 === tests rules ===
 
@@ -221,7 +152,6 @@ The following paths are ignored by ESLint:
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
 - Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
-- Run a single test: `php artisan test --filter=TestName`
 
 === inertia-laravel/core rules ===
 
@@ -230,6 +160,7 @@ The following paths are ignored by ESLint:
 - Inertia creates fully client-side rendered SPAs without modern SPA complexity, leveraging existing server-side patterns.
 - Components live in `resources/js/pages` (unless specified in `vite.config.js`). Use `Inertia::render()` for server-side routing instead of Blade views.
 - ALWAYS use `search-docs` tool for version-specific Inertia documentation and updated code examples.
+- IMPORTANT: Activate `inertia-vue-development` when working with Inertia Vue client-side patterns.
 
 # Inertia v2
 
@@ -345,5 +276,20 @@ Wayfinder generates TypeScript functions for Laravel routes. Import from `@/acti
 - Do NOT delete tests without approval.
 - CRITICAL: ALWAYS use `search-docs` tool for version-specific Pest documentation and updated code examples.
 - IMPORTANT: Activate `pest-testing` every time you're working with a Pest or testing-related task.
+
+=== inertia-vue/core rules ===
+
+# Inertia + Vue
+
+Vue components must have a single root element.
+- IMPORTANT: Activate `inertia-vue-development` when working with Inertia Vue client-side patterns.
+
+=== tailwindcss/core rules ===
+
+# Tailwind CSS
+
+- Always use existing Tailwind conventions; check project patterns before adding new ones.
+- IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
+- IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
 
 </laravel-boost-guidelines>

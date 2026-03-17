@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CertificadoController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExperienciaLaboralController;
 use App\Http\Controllers\TituloController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,8 @@ Route::inertia('/', 'Welcome', [
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+
+    Route::get('/curriculum/generate', [CurriculumController::class, 'generate'])->name('curriculum.generate');
 
     Route::resource('certificados', CertificadoController::class)->names('certificados');
     Route::resource('titulos', TituloController::class)->names('titulos');

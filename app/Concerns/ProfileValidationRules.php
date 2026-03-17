@@ -17,6 +17,15 @@ trait ProfileValidationRules
         return [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
+            'apellidos' => ['nullable', 'string', 'max:255'],
+            'lugar_fecha_nacimiento' => ['nullable', 'string', 'max:255'],
+            'nacionalidad' => ['nullable', 'string', 'max:255'],
+            'cedula_identidad' => ['nullable', 'string', 'max:50'],
+            'estado_civil' => ['nullable', 'string', 'max:100'],
+            'idioma' => ['nullable', 'string', 'max:255'],
+            'domicilio' => ['nullable', 'string', 'max:255'],
+            'celular' => ['nullable', 'string', 'max:20'],
+            'descripcion_profesional' => ['nullable', 'string'],
         ];
     }
 
