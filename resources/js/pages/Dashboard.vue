@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FileText, Award, Briefcase } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
 import { Doughnut } from 'vue-chartjs';
+import AlertError from '@/components/AlertError.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard as dashboardRoute } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+interface FailedPdf {
+    id: number;
+    nombre: string;
+    razon: string;
+}
 
 interface Props {
     stats: {
@@ -20,6 +28,22 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const page = usePage();
+
+const failedPdfs = ref<FailedPdf[]>([]);
+const showFailedAlert = ref(false);
+
+onMounted(() => {
+    const flashData = page.props.flash as
+        | { failed_pdfs?: FailedPdf[] }
+        | undefined;
+
+    if (flashData?.failed_pdfs && flashData.failed_pdfs.length > 0) {
+        failedPdfs.value = flashData.failed_pdfs;
+        showFailedAlert.value = true;
+    }
+});
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -29,6 +53,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const generateCurriculum = () => {
     window.open('/curriculum/generate', '_blank');
+};
+
+const downloadTitulos = () => {
+    window.open('/download/titulos-pdfs', '_blank');
+};
+
+const downloadCertificados = () => {
+    window.open('/download/certificados-pdfs', '_blank');
+};
+
+const downloadExperiencias = () => {
+    window.open('/download/experiencias-pdfs', '_blank');
 };
 
 const chartData = {
@@ -67,6 +103,13 @@ const totalRegistros =
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <div v-if="showFailedAlert && failedPdfs.length > 0" class="mx-4 mt-4">
+            <AlertError
+                title="Algunos PDFs no pudieron ser combinados"
+                :errors="failedPdfs.map((p) => `${p.nombre}: ${p.razon}`)"
+            />
+        </div>
+
         <div class="flex flex-col gap-6 p-4">
             <div class="flex justify-end">
                 <Button @click="generateCurriculum">
@@ -105,6 +148,28 @@ const totalRegistros =
                         {{ stats.totalTitulos }}
                     </p>
                     <p class="text-sm text-muted-foreground">Títulos</p>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        class="mt-3"
+                        @click="downloadTitulos"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mr-2 h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Descargar PDFs
+                    </Button>
                 </div>
 
                 <div
@@ -119,6 +184,28 @@ const totalRegistros =
                         {{ stats.totalCertificados }}
                     </p>
                     <p class="text-sm text-muted-foreground">Certificados</p>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        class="mt-3"
+                        @click="downloadCertificados"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mr-2 h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Descargar PDFs
+                    </Button>
                 </div>
 
                 <div
@@ -135,6 +222,28 @@ const totalRegistros =
                     <p class="text-sm text-muted-foreground">
                         Experiencias Laborales
                     </p>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        class="mt-3"
+                        @click="downloadExperiencias"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mr-2 h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                            />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Descargar PDFs
+                    </Button>
                 </div>
             </div>
 
