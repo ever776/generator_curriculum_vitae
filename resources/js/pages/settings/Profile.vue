@@ -56,7 +56,7 @@ const user = computed(() => page.props.auth.user);
                         <div class="relative">
                             <img
                                 v-if="user.foto"
-                                :src="'/storage/' + user.foto"
+                                :src="'/files/' + user.foto"
                                 alt="Foto de perfil"
                                 class="h-24 w-24 rounded-full border-2 border-gray-200 object-cover"
                             />

@@ -467,7 +467,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                     >
                                     <a
                                         v-else
-                                        :href="`/storage/${experiencia.pdf_path}`"
+                                        :href="`/files/${experiencia.pdf_path}`"
                                         target="_blank"
                                         class="text-blue-600 hover:underline"
                                     >
@@ -728,7 +728,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                         PDF actual:
                                     </p>
                                     <a
-                                        :href="`/storage/${selectedExperiencia.pdf_path}`"
+                                        :href="`/files/${selectedExperiencia.pdf_path}`"
                                         target="_blank"
                                         class="text-blue-600 hover:underline"
                                     >

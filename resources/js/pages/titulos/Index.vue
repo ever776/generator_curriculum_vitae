@@ -358,7 +358,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                                 <td class="px-4 py-3 text-sm">
                                     <a
                                         v-if="titulo.pdf_path"
-                                        :href="`/storage/${titulo.pdf_path}`"
+                                        :href="`/files/${titulo.pdf_path}`"
                                         target="_blank"
                                         class="text-blue-600 hover:underline"
                                     >
