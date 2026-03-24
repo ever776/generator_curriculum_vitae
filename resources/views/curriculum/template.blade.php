@@ -339,7 +339,7 @@
                         @endif
                         @if($user->celular)
                             <div class="contact-item">
-                                <span class="contact-label">Tel:</span>
+                                <span class="contact-label">Cel:</span>
                                 <span class="contact-value">{{ $user->celular }}</span>
                             </div>
                         @endif
@@ -403,11 +403,11 @@
             <!-- Formación Académica -->
             @if($titulos->count() > 0)
                 <div class="section">
-                    <div class="section-title">Formación Académica</div>
+                    <div class="section-title">Formación Académica | Titulos/Diplomas/Certificados</div>
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th class="col-nombre">Título</th>
+                                <th class="col-nombre">Nombre</th>
                                 <th class="col-institucion">Institución</th>
                                 <th class="col-fecha">Fecha</th>
                             </tr>
@@ -428,12 +428,12 @@
             <!-- Certificados -->
             @if($certificados->count() > 0)
                 <div class="section">
-                    <div class="section-title">Certificados</div>
+                    <div class="section-title">Certificados - Cursos/Seminarios/Talleres/Congresos</div>
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th class="col-nombre">Nombre</th>
-                                <th class="col-institucion">Institución</th>
+                                <th class="col-institucion">Entidad</th>
                                 <th class="col-fecha">Fecha Inicio</th>
                                 <th class="col-fecha">Fecha Fin</th>
                                 <th class="col-duracion">Duración</th>

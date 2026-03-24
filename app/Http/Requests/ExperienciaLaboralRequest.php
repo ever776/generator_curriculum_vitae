@@ -21,8 +21,7 @@ class ExperienciaLaboralRequest extends FormRequest
             'direccion' => ['required', 'string', 'max:255'],
             'fecha_inicio' => ['required', 'date'],
             'fecha_final' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
-            'pdfs' => ['nullable', 'array', 'max:5'],
-            'pdfs.*' => ['file', File::types(['pdf'])->max(10240)],
+            'pdf_path' => ['nullable', 'file', File::types(['pdf'])->max(10240)],
         ];
 
         return $rules;
@@ -37,9 +36,8 @@ class ExperienciaLaboralRequest extends FormRequest
             'direccion.required' => 'La dirección es requerida.',
             'fecha_inicio.required' => 'La fecha de inicio es requerida.',
             'fecha_final.after_or_equal' => 'La fecha final no puede ser menor que la fecha de inicio.',
-            'pdfs.max' => 'Máximo 5 archivos PDF permitidos.',
-            'pdfs.*.max' => 'Cada archivo no puede superar los 10MB.',
-            'pdfs.*.file' => 'El archivo debe ser un archivo válido.',
+            'pdf_path.max' => 'El archivo no puede superar los 10MB.',
+            'pdf_path.file' => 'El archivo debe ser un archivo válido.',
         ];
     }
 }

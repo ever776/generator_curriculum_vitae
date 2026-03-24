@@ -1,31 +1,74 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { FileText, Award, Briefcase } from 'lucide-vue-next';
+import { Doughnut } from 'vue-chartjs';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { dashboard as dashboardRoute } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+interface Props {
+    stats: {
+        totalTitulos: number;
+        totalCertificados: number;
+        totalExperiencias: number;
+    };
+}
+
+const props = defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: dashboardRoute(),
     },
 ];
 
 const generateCurriculum = () => {
     window.open('/curriculum/generate', '_blank');
 };
+
+const chartData = {
+    labels: ['Títulos', 'Certificados', 'Experiencias'],
+    datasets: [
+        {
+            data: [
+                props.stats.totalTitulos,
+                props.stats.totalCertificados,
+                props.stats.totalExperiencias,
+            ],
+            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+            borderColor: ['#3b82f6', '#10b981', '#f59e0b'],
+            borderWidth: 1,
+        },
+    ],
+};
+
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'bottom' as const,
+        },
+    },
+};
+
+const totalRegistros =
+    props.stats.totalTitulos +
+    props.stats.totalCertificados +
+    props.stats.totalExperiencias;
 </script>
 
 <template>
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
-        >
-            <!-- Botón para generar CV -->
-            <div class="mb-4 flex justify-end">
+        <div class="flex flex-col gap-6 p-4">
+            <div class="flex justify-end">
                 <Button @click="generateCurriculum">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -49,27 +92,64 @@ const generateCurriculum = () => {
                 </Button>
             </div>
 
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div class="grid gap-4 md:grid-cols-3">
                 <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
+                    class="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/70 bg-card p-6 text-center dark:border-sidebar-border"
                 >
-                    <PlaceholderPattern />
+                    <div
+                        class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30"
+                    >
+                        <FileText class="h-7 w-7" />
+                    </div>
+                    <p class="text-3xl font-bold">
+                        {{ stats.totalTitulos }}
+                    </p>
+                    <p class="text-sm text-muted-foreground">Títulos</p>
                 </div>
+
                 <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
+                    class="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/70 bg-card p-6 text-center dark:border-sidebar-border"
                 >
-                    <PlaceholderPattern />
+                    <div
+                        class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30"
+                    >
+                        <Award class="h-7 w-7" />
+                    </div>
+                    <p class="text-3xl font-bold">
+                        {{ stats.totalCertificados }}
+                    </p>
+                    <p class="text-sm text-muted-foreground">Certificados</p>
                 </div>
+
                 <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
+                    class="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/70 bg-card p-6 text-center dark:border-sidebar-border"
                 >
-                    <PlaceholderPattern />
+                    <div
+                        class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30"
+                    >
+                        <Briefcase class="h-7 w-7" />
+                    </div>
+                    <p class="text-3xl font-bold">
+                        {{ stats.totalExperiencias }}
+                    </p>
+                    <p class="text-sm text-muted-foreground">
+                        Experiencias Laborales
+                    </p>
                 </div>
             </div>
+
             <div
-                class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
+                class="flex flex-col items-center justify-center rounded-xl border border-sidebar-border/70 bg-card p-6 md:col-span-2 lg:col-span-1 dark:border-sidebar-border"
             >
-                <PlaceholderPattern />
+                <h3 class="mb-4 text-lg font-semibold">
+                    Distribución de Registros
+                </h3>
+                <div class="h-64 w-full max-w-sm">
+                    <Doughnut :data="chartData" :options="chartOptions" />
+                </div>
+                <p class="mt-4 text-sm text-muted-foreground">
+                    Total: {{ totalRegistros }} registros
+                </p>
             </div>
         </div>
     </AppLayout>

@@ -26,7 +26,7 @@ class ExperienciaLaboral extends Model
         'fecha_inicio',
         'fecha_final',
         'duracion',
-        'pdfs',
+        'pdf_path',
     ];
 
     protected function casts(): array
@@ -34,7 +34,6 @@ class ExperienciaLaboral extends Model
         return [
             'fecha_inicio' => 'date',
             'fecha_final' => 'date',
-            'pdfs' => 'array',
         ];
     }
 
@@ -52,15 +51,6 @@ class ExperienciaLaboral extends Model
             'direccion' => ['required', 'string', 'max:255'],
             'fecha_inicio' => ['required', 'date'],
             'fecha_final' => ['nullable', 'date'],
-            'pdf_path' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-        ];
-    }
-
-    public static function messages(): array
-    {
-        return [
-            'pdf_path.mimes' => 'El archivo debe ser un PDF.',
-            'pdf_path.max' => 'El archivo no puede superar los 10MB.',
         ];
     }
 
